@@ -1,21 +1,23 @@
 {% extends 'base.html' %} {% block content %}
-<h5>Nama:</h5>
-<p>{{ nama }}</p>
+<h5>Nama: {{ nama }}</h5>
 <h5>Sesi terakhir login: {{ last_login }}</h5>
-<table>
-  <tr>
-    <th>Nama Barang</th>
-    <th>Harga Barang</th>
-    <th>Deskripsi</th>
-  </tr>
-  {% for barang in list_barang %}
-  <tr>
-    <th>{{barang.nama_barang}}</th>
-    <th>{{barang.harga_barang}}</th>
-    <th>{{barang.deskripsi}}</th>
-  </tr>
-  {% endfor %}
-  <button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+<table class="table table-dark table-striped" border="1">
+  <thead>
+    <tr>
+      <th scope="col">Nama Barang</th>
+      <th scope="col">Harga Barang</th>
+      <th scope="col">Deskripsi</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for barang in list_barang %}
+    <tr>
+      <th>{{barang.nama_barang}}</th>
+      <th>{{barang.harga_barang}}</th>
+      <th>{{barang.deskripsi}}</th>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
 {% endblock content %}
