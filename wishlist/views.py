@@ -1,3 +1,4 @@
+from cgitb import reset
 from django.shortcuts import render
 from wishlist.models import BarangWishlist
 from django.http import HttpResponse
@@ -11,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required(login_url='/wishlist/login/')
 def show_wishlist(request):
@@ -84,3 +86,25 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('wishlist:login'))
     response.delete_cookie('last_login')
     return response
+
+@login_required(login_url='/wishlist/login/')
+def wishlist_ajax(request):
+    context = {
+        'nama': 'Risa',
+        'last_login': request.COOKIES['last_login'],
+    }
+    return render(request, "wishlist_ajax.html", context)
+
+@login_required(login_url='/wishlist/login/')
+@csrf_exempt
+def add_wishlist_ajax(request):
+    if request.method == "POST" :
+        nama_barang = request.POST.get("nama_barang")
+        harga_barang = request.POST.get("harga_barang")
+        deskripsi = request.POST.get("deskripsi")
+        print(nama_barang, harga_barang, deskripsi)
+        newBarang = BarangWishlist.objects.create(nama_barang = nama_barang, harga_barang = harga_barang, deskripsi = deskripsi)
+        newBarang.save()
+        return HttpResponse()
+    else:
+        return redirect("wishlist:show_wishlist")
